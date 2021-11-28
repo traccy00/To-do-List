@@ -30,10 +30,13 @@ public class Task {
     @ColumnInfo(name = "ring")
     private String ring;
 
+    @ColumnInfo(name = "is_done")
+    private int isDone;
+
     public Task() {
     }
 
-    public Task(int id, String title, String date, String startTime, String endTime, String description, String ring) {
+    public Task(int id, String title, String date, String startTime, String endTime, String description, String ring, int isDone) {
         this.id = id;
         this.title = title;
         this.date = date;
@@ -41,6 +44,7 @@ public class Task {
         this.endTime = endTime;
         this.description = description;
         this.ring = ring;
+        this.isDone = isDone;
     }
 
     public int getId() {
@@ -97,5 +101,13 @@ public class Task {
 
     public void setRing(String ring) {
         this.ring = ring;
+    }
+
+    public int getIsDone() {
+        return isDone;
+    }
+
+    public void setIsDone(int isDone) {
+        this.isDone = isDone;
     }
 }

@@ -50,6 +50,7 @@ public class AddTaskActivity extends AppCompatActivity {
     Button btnAddTime, btnSpeechDescription;
     Utils utils;
     Switch switchRing;
+    boolean clickedAddTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,10 +70,11 @@ public class AddTaskActivity extends AppCompatActivity {
         btnSpeechDescription = findViewById(R.id.btn_speech_description);
 
         utils = new Utils();
-
+        clickedAddTime = false;
         btnAddTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                clickedAddTime = true;
                 allDay.setChecked(false);
                 btnAddTime.setVisibility(View.GONE);
                 ((TextView) findViewById(R.id.tv_end_time)).setVisibility(View.VISIBLE);
@@ -227,16 +229,22 @@ public class AddTaskActivity extends AppCompatActivity {
             return;
         }
         String date = edtDate.getText().toString();
-        String startTime = edtStartTime.getText().toString();
-        String endTime = edtEndTime.getText().toString();
-        if (allDay.isChecked()) {
+        String startTime = "";
+        String endTime = "";
+        if (allDay.isChecked() || !clickedAddTime) {
             startTime = Constant.START_TIME_DEFAULT;
             endTime = Constant.END_TIME_DEFAULT;
+        } else if(clickedAddTime == true && !allDay.isChecked()) {
+            startTime =  edtStartTime.getText().toString();
+            endTime = edtEndTime.getText().toString();
         }
-
         String description = edtDescription.getText().toString();
-        String ring = edtRing.getText().toString();
-        taskDAO.createTask(title, date, startTime, endTime, description, ring);
+        String ring = "";
+        //check if setting ring bell
+        if(switchRing.isChecked()) {
+            ring = edtRing.getText().toString();
+        }
+        taskDAO.createTask(title, date, startTime, endTime, description, ring, 0);
         Toast.makeText(getApplicationContext(), "Add task successfully", Toast.LENGTH_SHORT).show();
 //        Log.d("myapp", Log.getStackTraceString(new Exception()));
         Intent intent = new Intent(this, MainActivity.class);

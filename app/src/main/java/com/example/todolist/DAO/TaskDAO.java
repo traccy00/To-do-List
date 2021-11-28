@@ -10,13 +10,13 @@ import java.util.List;
 
 @Dao
 public interface TaskDAO {
-    @Query("select * from tasks")
-    List<Task> getAllTasks();
+    @Query("SELECT * from tasks order by date asc, start_time asc")
+    List<Task> getAll();
 
-    @Query("INSERT INTO tasks(title, date, start_time, end_time, description, ring) " +
-            "VALUES (:title, :date, :startTime, :endTime, :description, :ring)")
-    void createTask(String title, String date, String startTime, String endTime, String description, String ring);
+    @Query("INSERT INTO tasks(title, date, start_time, end_time, description, ring, is_done) " +
+            "VALUES (:title, :date, :startTime, :endTime, :description, :ring, :isDone)")
+    void createTask(String title, String date, String startTime, String endTime, String description, String ring, int isDone);
 
-//    @Query("INSERT INTO tasks(title, date) VALUES (:title, :date)")
-//    void createTask(String title, String date);
+    @Query("UPDATE tasks SET is_done = :isDone where id = :id")
+    void updateTaskById(int isDone, int id);
 }
