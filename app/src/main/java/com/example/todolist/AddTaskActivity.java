@@ -1,11 +1,5 @@
 package com.example.todolist;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -27,30 +21,44 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
+
+import com.example.todolist.DAO.CategoryDAO;
 import com.example.todolist.DAO.TaskDAO;
+import com.example.todolist.adapter.CategoryListAdapter;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.common.Utils;
+import com.example.todolist.entity.Category;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
 //implements AdapterView.OnItemSelectedListener
-public class AddTaskActivity extends AppCompatActivity {
+public class AddTaskActivity extends AppCompatActivity implements RecyclerViewClickListener{
     private static int SPEECH_REQUEST_CODE = 0;
     private static int SPEECH_REQUEST_CODE_1 = 1;
 
-    EditText edtDate, edtStartTime, edtEndTime, edtDescription, edtTitle, edtRing;
-    TextView tvStartTime, tvEndTime;
+    private EditText edtDate, edtStartTime, edtEndTime, edtDescription, edtTitle, edtRing;
+    private TextView tvStartTime, tvEndTime;
     //    Spinner spinner1, spinner2;
-    int selectedHour, selectedMinutes, selectedDayOfMonth, selectedMonth, selectedYear;
-    String lastSetTime;
-    CheckBox allDay;
-    Button btnAddTime, btnSpeechDescription;
-    Utils utils;
-    Switch switchRing;
-    boolean clickedAddTime;
+    private int selectedHour, selectedMinutes, selectedDayOfMonth, selectedMonth, selectedYear;
+    private String lastSetTime;
+    private CheckBox allDay;
+    private Button btnAddTime, btnSpeechDescription;
+    private Utils utils;
+    private Switch switchRing;
+    private boolean clickedAddTime;
+    private RecyclerView rvCategoryList;
+    private List<Category> categoryList;
+    private int categoryId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,7 @@ public class AddTaskActivity extends AppCompatActivity {
         switchRing = findViewById(R.id.switch1);
         edtRing.setEnabled(false);
         btnSpeechDescription = findViewById(R.id.btn_speech_description);
+        rvCategoryList = findViewById(R.id.rv_categories_2);
 
         utils = new Utils();
         clickedAddTime = false;
@@ -153,6 +162,17 @@ public class AddTaskActivity extends AppCompatActivity {
         edtStartTime.setText(currentTime);
         int defaultEndTime = calendar.get(Calendar.HOUR_OF_DAY) + 1;
         edtEndTime.setText(defaultEndTime + ":" + calendar.get(Calendar.MINUTE));
+
+        //recycler view category
+        AppDatabase db = Room
+                .databaseBuilder(this.getApplicationContext(), AppDatabase.class, "todoDB")
+                .allowMainThreadQueries()
+                .build();
+        CategoryDAO categoryDAO = db.categoryDAO();
+        categoryList = categoryDAO.getAll();
+        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList, this);
+        rvCategoryList.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        rvCategoryList.setAdapter(categoryListAdapter);
     }
 
     public void validateTime(EditText editText) {
@@ -234,17 +254,19 @@ public class AddTaskActivity extends AppCompatActivity {
         if (allDay.isChecked() || !clickedAddTime) {
             startTime = Constant.START_TIME_DEFAULT;
             endTime = Constant.END_TIME_DEFAULT;
-        } else if(clickedAddTime == true && !allDay.isChecked()) {
-            startTime =  edtStartTime.getText().toString();
+        } else if (clickedAddTime == true && !allDay.isChecked()) {
+            startTime = edtStartTime.getText().toString();
             endTime = edtEndTime.getText().toString();
         }
         String description = edtDescription.getText().toString();
         String ring = "";
         //check if setting ring bell
-        if(switchRing.isChecked()) {
+        if (switchRing.isChecked()) {
             ring = edtRing.getText().toString();
         }
-        taskDAO.createTask(title, date, startTime, endTime, description, ring, 0);
+        //get category
+        taskDAO.createTask(title, date, startTime, endTime, description, ring, 0, categoryId);
+
         Toast.makeText(getApplicationContext(), "Add task successfully", Toast.LENGTH_SHORT).show();
 //        Log.d("myapp", Log.getStackTraceString(new Exception()));
         Intent intent = new Intent(this, MainActivity.class);
@@ -283,7 +305,7 @@ public class AddTaskActivity extends AppCompatActivity {
     private void displaySpeechRecognizer(EditText editText) {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        if(editText == edtDescription) {
+        if (editText == edtDescription) {
             startActivityForResult(intent, SPEECH_REQUEST_CODE);
         } else if (editText == edtTitle) {
             startActivityForResult(intent, SPEECH_REQUEST_CODE_1);
@@ -315,6 +337,10 @@ public class AddTaskActivity extends AppCompatActivity {
         displaySpeechRecognizer(edtTitle);
     }
 
+    @Override
+    public void onCategoryClick(int categoryId) {
+        this.categoryId = categoryId;
+    }
 
 
     //    @Override

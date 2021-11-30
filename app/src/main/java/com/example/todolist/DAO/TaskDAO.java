@@ -13,9 +13,9 @@ public interface TaskDAO {
     @Query("SELECT * from tasks order by date asc, start_time asc")
     List<Task> getAll();
 
-    @Query("INSERT INTO tasks(title, date, start_time, end_time, description, ring, is_done) " +
-            "VALUES (:title, :date, :startTime, :endTime, :description, :ring, :isDone)")
-    void createTask(String title, String date, String startTime, String endTime, String description, String ring, int isDone);
+    @Query("INSERT INTO tasks(title, date, start_time, end_time, description, ring, is_done, category_id) " +
+            "VALUES (:title, :date, :startTime, :endTime, :description, :ring, :isDone, :categoryId)")
+    void createTask(String title, String date, String startTime, String endTime, String description, String ring, int isDone, int categoryId);
 
     @Query("UPDATE tasks SET is_done = :isDone where id = :id")
     void updateTaskById(int isDone, int id);

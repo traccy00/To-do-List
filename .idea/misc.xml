@@ -33,9 +33,12 @@
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_main.xml" value="0.152" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_calendar.xml" value="0.23641304347826086" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_category.xml" value="0.25416666666666665" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_category_list.xml" value="0.11614583333333334" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_me.xml" value="0.23641304347826086" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_setting.xml" value="0.2" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_task_list.xml" value="0.23641304347826086" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/row_category.xml" value="0.1" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/row_task.xml" value="0.16799999999999998" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
       </map>

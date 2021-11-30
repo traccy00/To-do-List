@@ -1,12 +1,10 @@
-package com.example.todolist.common;
+package com.example.todolist.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,21 +13,22 @@ import androidx.room.Room;
 
 import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.R;
+import com.example.todolist.common.AppDatabase;
 import com.example.todolist.entity.Task;
 
 import java.util.List;
 
-public class MyCustomAdapter extends RecyclerView.Adapter<MyCustomAdapter.MyViewHolder> {
+public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyViewHolder> {
 
     private List<Task> taskList;
 
-    public MyCustomAdapter(List<Task> list) {
+    public TaskListAdapter(List<Task> list) {
         this.taskList = list;
     }
 
     @NonNull
     @Override
-    public MyCustomAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public TaskListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_task, parent, false);
         return new MyViewHolder(v);
     }
