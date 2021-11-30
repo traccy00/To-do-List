@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void createTask(View view) {
+    public void onCreateTaskActivity(View view) {
         Intent intent = new Intent(this, AddTaskActivity.class);
         startActivity(intent);
     }
