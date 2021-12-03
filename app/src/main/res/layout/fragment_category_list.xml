@@ -11,24 +11,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_category_list"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btn_add_category"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+ Add more"
-            android:onClick="onCategoryListFragment"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/button_background"/>
-    </LinearLayout>
+            android:orientation="vertical">
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_category_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btn_add_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background"
+                android:text="+ Add more" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </FrameLayout>

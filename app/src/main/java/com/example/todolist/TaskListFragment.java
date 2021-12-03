@@ -2,6 +2,10 @@ package com.example.todolist;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,16 +16,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-
 import com.example.todolist.DAO.CategoryDAO;
 import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.adapter.CategoryListAdapter;
-import com.example.todolist.common.AppDatabase;
 import com.example.todolist.adapter.TaskListAdapter;
+import com.example.todolist.common.AppDatabase;
 import com.example.todolist.entity.Category;
 import com.example.todolist.entity.Task;
 
@@ -32,12 +31,13 @@ import java.util.List;
  * Use the {@link TaskListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskListFragment extends Fragment {
+public class TaskListFragment extends Fragment implements RecyclerViewClickListener{
 
     private RecyclerView rvTaskList, rvCategoryList;
     private List<Task> taskList;
     private List<Category> categoryList;
     private Button btnListCategory;
+    private int categoryId;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -105,7 +105,7 @@ public class TaskListFragment extends Fragment {
         rvCategoryList = view.findViewById(R.id.rv_categories);
         CategoryDAO categoryDAO = db.categoryDAO();
         categoryList = categoryDAO.getAll();
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList);
+        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList, TaskListFragment.this,"TaskListFragment");
         rvCategoryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         rvCategoryList.setAdapter(categoryListAdapter);
 
@@ -120,5 +120,10 @@ public class TaskListFragment extends Fragment {
                 fragmentTransaction.commit();
             }
         });
+    }
+
+    @Override
+    public void onCategoryClick(int categoryId) {
+        this.categoryId = categoryId;
     }
 }

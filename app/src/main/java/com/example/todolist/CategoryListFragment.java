@@ -4,6 +4,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,17 +18,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-
 import com.example.todolist.DAO.CategoryDAO;
 import com.example.todolist.adapter.CategoryListAdapter;
 import com.example.todolist.common.AppDatabase;
+import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -31,11 +32,14 @@ import java.util.List;
  * Use the {@link CategoryListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CategoryListFragment extends Fragment {
+public class CategoryListFragment extends Fragment implements RecyclerViewClickListener {
 
     private List<Category> categoryList;
     private Button btnAddCategory;
     private RecyclerView rvCategoryList;
+    private int categoryId;
+    public RecyclerViewClickListener listener;
+    private MainActivity mainActivity;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +72,14 @@ public class CategoryListFragment extends Fragment {
         return fragment;
     }
 
+//    @Override
+//    public void onAttach(@NonNull Context context) {
+//        super.onAttach(context);
+//        if(context instanceof MainActivity) {
+//            mainActivity = (MainActivity) context;
+//        }
+//    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +99,7 @@ public class CategoryListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         rvCategoryList = view.findViewById(R.id.rv_category_list);
+        rvCategoryList.setNestedScrollingEnabled(false);
         Context context = view.getContext();
         super.onViewCreated(view, savedInstanceState);
         AppDatabase db = Room
@@ -102,15 +115,21 @@ public class CategoryListFragment extends Fragment {
                 LinearLayout layout = new LinearLayout(context);
                 layout.setOrientation(LinearLayout.VERTICAL);
                 final EditText nameBox = new EditText(context);
-                nameBox.setHint("Enter name");
+                nameBox.setHint(Constant.CATEGORY_NAME_HINT);
                 layout.addView(nameBox);
                 AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setTitle("Add category")
+                        .setTitle(Constant.NEW_CATEGORY)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                categoryDAO.createCategory(nameBox.getText().toString());
+                                String categoryName = nameBox.getText().toString();
+                                //check category name exist
+                                Category category = categoryDAO.findByName(categoryName);
+                                if (category == null) {
+                                    //create category
+                                    categoryDAO.createCategory(nameBox.getText().toString());
+                                }
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -127,8 +146,51 @@ public class CategoryListFragment extends Fragment {
 
         //get category list
         categoryList = categoryDAO.getAll();
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList);
+        CategoryListAdapter categoryListAdapter =
+                new CategoryListAdapter(categoryList, CategoryListFragment.this, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new CategoryDetailDialog(categoryId).show(getActivity().getSupportFragmentManager(), "HEHEHE");
+                    }
+                }, "CategoryListFragment");
         rvCategoryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        //notify data change
+        categoryListAdapter.notifyDataSetChanged();
         rvCategoryList.setAdapter(categoryListAdapter);
     }
+
+
+    @Override
+    public void onCategoryClick(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+//    public void showCategoryAlertDialog(Category category) {
+//        LinearLayout layout = new LinearLayout(context);
+//        layout.setOrientation(LinearLayout.VERTICAL);
+//        final EditText editText = new EditText(context);
+//        editText.setText(category.getName());
+//        layout.addView(editText);
+//        if (getActivity() != null) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+//                    .setTitle(Constant.CATEGORY_DETAIL_TITLE)
+//                    .setIcon(android.R.drawable.ic_dialog_alert)
+//                    .setMessage("abc")
+//                    .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Toast.makeText(getContext(), "Please check the number you entered", Toast.LENGTH_LONG).show();
+//                        }
+//                    })
+//                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            Toast.makeText(getContext(), "Please check the number you entered", Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+////                .setView(layout);
+//            AlertDialog dialog = builder.create();
+//            dialog.show();
+//        }
+//    }
 }

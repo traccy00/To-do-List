@@ -43,11 +43,10 @@ import java.util.List;
 
 //implements AdapterView.OnItemSelectedListener
 public class AddTaskActivity extends AppCompatActivity implements RecyclerViewClickListener{
-    private static int SPEECH_REQUEST_CODE = 0;
-    private static int SPEECH_REQUEST_CODE_1 = 1;
+    private static final int SPEECH_REQUEST_CODE = 0;
+    private static final int SPEECH_REQUEST_CODE_1 = 1;
 
     private EditText edtDate, edtStartTime, edtEndTime, edtDescription, edtTitle, edtRing;
-    private TextView tvStartTime, tvEndTime;
     //    Spinner spinner1, spinner2;
     private int selectedHour, selectedMinutes, selectedDayOfMonth, selectedMonth, selectedYear;
     private String lastSetTime;
@@ -170,8 +169,10 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
                 .build();
         CategoryDAO categoryDAO = db.categoryDAO();
         categoryList = categoryDAO.getAll();
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList, this);
-        rvCategoryList.setLayoutManager(new LinearLayoutManager(this.getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        CategoryListAdapter categoryListAdapter =
+                new CategoryListAdapter(categoryList, this, "AddTaskActivity");
+        rvCategoryList.setLayoutManager(new LinearLayoutManager
+                (this.getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         rvCategoryList.setAdapter(categoryListAdapter);
     }
 
@@ -337,6 +338,7 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
         displaySpeechRecognizer(edtTitle);
     }
 
+    //get clicked category id for insert task
     @Override
     public void onCategoryClick(int categoryId) {
         this.categoryId = categoryId;
