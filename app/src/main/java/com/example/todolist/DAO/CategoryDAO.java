@@ -14,4 +14,13 @@ public interface CategoryDAO {
 
     @Query("INSERT INTO categories(name) VALUES (:name)")
     void createCategory(String name);
+
+    @Query("SELECT * from categories where name like :name")
+    Category findByName(String name);
+
+    @Query("SELECT * from categories where id = :categoryId")
+    Category findById(int categoryId);
+
+    @Query("UPDATE categories SET name = :editedName WHERE id = :categoryId")
+    void updateCategory(String editedName, int categoryId);
 }

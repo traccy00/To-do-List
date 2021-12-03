@@ -19,4 +19,7 @@ public interface TaskDAO {
 
     @Query("UPDATE tasks SET is_done = :isDone where id = :id")
     void updateTaskById(int isDone, int id);
+
+    @Query("SELECT * FROM tasks where category_id = :categoryId")
+    List<Task> getTasksByCategoryId(int categoryId);
 }
