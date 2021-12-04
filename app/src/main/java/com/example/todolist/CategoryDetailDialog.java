@@ -72,4 +72,9 @@ public class CategoryDetailDialog extends AppCompatDialogFragment implements Rec
     public void onCategoryClick(int categoryId) {
         this.categoryId = categoryId;
     }
+
+    @Override
+    public void onTaskClick(int taskId) {
+
+    }
 }

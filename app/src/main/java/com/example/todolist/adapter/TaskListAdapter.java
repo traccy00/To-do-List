@@ -13,6 +13,7 @@ import androidx.room.Room;
 
 import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.R;
+import com.example.todolist.RecyclerViewClickListener;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.entity.Task;
 
@@ -21,9 +22,20 @@ import java.util.List;
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyViewHolder> {
 
     private List<Task> taskList;
+    private RecyclerViewClickListener recyclerViewClickListener;
+    private View.OnClickListener itemClickListener;
+    private String className;
 
-    public TaskListAdapter(List<Task> list) {
+    public TaskListAdapter(List<Task> list, RecyclerViewClickListener recyclerViewClickListener, String className) {
         this.taskList = list;
+        this.recyclerViewClickListener = recyclerViewClickListener;
+        this.className = className;
+    }
+    public TaskListAdapter(List<Task> list, RecyclerViewClickListener recyclerViewClickListener, View.OnClickListener itemClickListener, String className) {
+        this.taskList = list;
+        this.recyclerViewClickListener = recyclerViewClickListener;
+        this.itemClickListener = itemClickListener;
+        this.className = className;
     }
 
     @NonNull
@@ -95,6 +107,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.MyView
             holder.cbDone.setChecked(false);
         } else {
             holder.cbDone.setChecked(true);
+        }
+        if(className.equals("TaskListFragment")) {
+            recyclerViewClickListener.onTaskClick(task.getId());
+            holder.itemView.setOnClickListener(itemClickListener);
         }
     }
 

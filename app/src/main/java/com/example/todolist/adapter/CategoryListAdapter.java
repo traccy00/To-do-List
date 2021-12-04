@@ -25,6 +25,7 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
     private RecyclerViewClickListener recyclerViewClickListener;
     private String className;
     public View.OnClickListener itemClickListener;
+    public RecyclerView rvTaskList;
 
     public CategoryListAdapter() {}
 
@@ -83,6 +84,8 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                 } else if (className.equals("CategoryListFragment")) {
                     recyclerViewClickListener.onCategoryClick(category.getId());
                     holder.itemView.setOnClickListener(itemClickListener);
+                } else if(className.equals("TaskListFragment")) {
+                    recyclerViewClickListener.onCategoryClick(category.getId());
                 }
             }
         });

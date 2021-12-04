@@ -165,6 +165,11 @@ public class CategoryListFragment extends Fragment implements RecyclerViewClickL
         this.categoryId = categoryId;
     }
 
+    @Override
+    public void onTaskClick(int taskId) {
+
+    }
+
 //    public void showCategoryAlertDialog(Category category) {
 //        LinearLayout layout = new LinearLayout(context);
 //        layout.setOrientation(LinearLayout.VERTICAL);
