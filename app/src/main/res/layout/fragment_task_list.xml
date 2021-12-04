@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
     tools:context=".TaskListFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -53,11 +54,11 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_tasks"
                 android:layout_width="match_parent"
-                android:layout_height="699dp" />
-
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -73,7 +74,7 @@
             android:layout_marginBottom="32dp"
             android:onClick="onCreateTaskActivity"
             android:src="@drawable/ic_baseline_add" />
-    </RelativeLayout>
 
+    </RelativeLayout>
 
 </FrameLayout>

@@ -2,8 +2,11 @@ package com.example.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,9 +17,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
+    boolean doubleBackToExit = false;
     BottomNavigationView bottomNavigationView;
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
+
+//    @Override
+//    public void onBackPressed() {
+//        if (doubleBackToExit) {
+//            super.onBackPressed();
+//            return;
+//        }
+//        this.doubleBackToExit = true;
+//        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+//        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                doubleBackToExit = false;
+//            }
+//        }, 2000);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
