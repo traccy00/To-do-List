@@ -344,6 +344,11 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
         this.categoryId = categoryId;
     }
 
+    @Override
+    public void onTaskClick(int taskId) {
+
+    }
+
 
     //    @Override
 //    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

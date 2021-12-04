@@ -31,13 +31,14 @@ import java.util.List;
  * Use the {@link TaskListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskListFragment extends Fragment implements RecyclerViewClickListener{
+public class TaskListFragment extends Fragment implements RecyclerViewClickListener {
 
     private RecyclerView rvTaskList, rvCategoryList;
     private List<Task> taskList;
     private List<Category> categoryList;
     private Button btnListCategory;
     private int categoryId;
+    private int taskId;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,14 +99,21 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
                 .build();
         TaskDAO taskDAO = db.taskDAO();
         taskList = taskDAO.getAll();
-        TaskListAdapter taskListAdapter = new TaskListAdapter(taskList);
-        rvTaskList.setLayoutManager(new LinearLayoutManager(context));
-        rvTaskList.setAdapter(taskListAdapter);
-
+        //category list
         rvCategoryList = view.findViewById(R.id.rv_categories);
         CategoryDAO categoryDAO = db.categoryDAO();
         categoryList = categoryDAO.getAll();
-        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList, TaskListFragment.this,"TaskListFragment");
+        //get category id
+        CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList, TaskListFragment.this, "TaskListFragment");
+        //task list
+        TaskListAdapter taskListAdapter = new TaskListAdapter(taskList, TaskListFragment.this, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //task detail
+            }
+        }, "TaskListFragment");
+        rvTaskList.setLayoutManager(new LinearLayoutManager(context));
+        rvTaskList.setAdapter(taskListAdapter);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         rvCategoryList.setAdapter(categoryListAdapter);
 
@@ -124,6 +132,24 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
 
     @Override
     public void onCategoryClick(int categoryId) {
+        Context context = this.getContext();
         this.categoryId = categoryId;
+        if(categoryId != 0) {
+            AppDatabase db = Room
+                    .databaseBuilder(context, AppDatabase.class, "todoDB")
+                    .allowMainThreadQueries()
+                    .fallbackToDestructiveMigration()
+                    .build();
+            TaskDAO taskDAO = db.taskDAO();
+            taskList = taskDAO.getTasksByCategoryId(categoryId);
+            TaskListAdapter taskListAdapter = new TaskListAdapter(taskList, TaskListFragment.this, "TaskListFragment");
+            rvTaskList.setLayoutManager(new LinearLayoutManager(context));
+            rvTaskList.setAdapter(taskListAdapter);
+        }
+    }
+
+    @Override
+    public void onTaskClick(int taskId) {
+        this.taskId = taskId;
     }
 }
