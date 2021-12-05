@@ -42,13 +42,13 @@ import java.util.Calendar;
 import java.util.List;
 
 //implements AdapterView.OnItemSelectedListener
-public class AddTaskActivity extends AppCompatActivity implements RecyclerViewClickListener{
+public class AddTaskActivity extends AppCompatActivity implements RecyclerViewClickListener {
     private static final int SPEECH_REQUEST_CODE = 0;
     private static final int SPEECH_REQUEST_CODE_1 = 1;
 
     private EditText edtDate, edtStartTime, edtEndTime, edtDescription, edtTitle, edtRing;
     //    Spinner spinner1, spinner2;
-    private int selectedHour, selectedMinutes, selectedDayOfMonth, selectedMonth, selectedYear;
+    private int selectedHour, selectedMinutes;
     private String lastSetTime;
     private CheckBox allDay;
     private Button btnAddTime, btnSpeechDescription;
@@ -58,6 +58,10 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
     private RecyclerView rvCategoryList;
     private List<Category> categoryList;
     private int categoryId = 0;
+    Calendar calendar = Calendar.getInstance();
+    int selectedYear = calendar.get(Calendar.YEAR);
+    int selectedMonth = calendar.get(Calendar.MONTH);
+    int selectedDayOfMonth = calendar.get(Calendar.DATE);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +100,17 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (allDay.isChecked()) {
-                    edtStartTime.setEnabled(false);
-                    edtEndTime.setEnabled(false);
+                    edtStartTime.setVisibility(View.GONE);
+                    edtEndTime.setVisibility(View.GONE);
+                    ((TextView) findViewById(R.id.tv_end_time)).setVisibility(View.GONE);
+                    ((TextView) findViewById(R.id.tv_start_time)).setVisibility(View.GONE);
+                    btnAddTime.setVisibility(View.VISIBLE);
                 } else {
-                    edtStartTime.setEnabled(true);
-                    edtEndTime.setEnabled(true);
+                    edtStartTime.setVisibility(View.VISIBLE);
+                    edtEndTime.setVisibility(View.VISIBLE);
+                    ((TextView) findViewById(R.id.tv_end_time)).setVisibility(View.VISIBLE);
+                    ((TextView) findViewById(R.id.tv_start_time)).setVisibility(View.VISIBLE);
+                    btnAddTime.setVisibility(View.GONE);
                 }
             }
         });
@@ -148,13 +158,10 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
 
         //default date when go to create task screen
         Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat month_date = new SimpleDateFormat("MMMM");
         int date = calendar.get(Calendar.DATE);
-        int month = calendar.get(Calendar.MONTH);
-        calendar.set(Calendar.MONTH, month);
-        String month_name = month_date.format(calendar.getTime());
+        int month = calendar.get(Calendar.MONTH) + 1;
         int year = calendar.get(Calendar.YEAR);
-        edtDate.setText(month_name + ", " + date + " " + year);
+        edtDate.setText(date + "/" + month + "/" + year);
 
         String currentTime = calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE);
         edtRing.setText(currentTime);
@@ -198,8 +205,8 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
             @Override
             public void onTimeSet(TimePicker view, int h, int m) {
                 String message;
-                if (m == 0) {
-                    message = h + ":00";
+                if (m < 10) {
+                    message = h + ":0" + m;
                 } else {
                     message = h + ":" + m;
                 }
@@ -222,20 +229,32 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
         validateTime(edtEndTime);
     }
 
-
+    //get date of task
     public void getDate(View view) {
-        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                String message = dayOfMonth + "/" + month + "/" + year;
+//                edtDate.setText(message);
+//                selectedDayOfMonth = dayOfMonth;
+//                selectedMonth = month;
+//                selectedYear = year;
+//            }
+//        }, selectedYear, selectedMonth, selectedDayOfMonth);
+//        dialog.show();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                String message = month + ", " + dayOfMonth + " " + year;
-                Log.i("loggg", "month:" + month);
-                edtDate.setText(message);
+            public void onDateSet(DatePicker view, int year,
+                                  int monthOfYear, int dayOfMonth) {
+                edtDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                 selectedDayOfMonth = dayOfMonth;
-                selectedMonth = month;
+                selectedMonth = monthOfYear;
                 selectedYear = year;
             }
-        }, selectedYear, selectedMonth, selectedDayOfMonth);
-        dialog.show();
+        };
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                dateSetListener, selectedYear, selectedMonth, selectedDayOfMonth);
+        datePickerDialog.show();
     }
 
     public void onInsertTask(View view) {

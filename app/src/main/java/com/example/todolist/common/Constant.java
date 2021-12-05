@@ -4,6 +4,7 @@ public interface Constant {
     String DATABASE_NAME = "todoDB";
     String START_TIME_DEFAULT = "0:00";
     String END_TIME_DEFAULT = "23:59";
+    String ALL_DAY = "All day";
     String CATEGORY_DETAIL_TITLE = "Category";
     String NEW_CATEGORY = "New category";
     String CATEGORY_NAME_HINT = "Work";

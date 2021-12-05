@@ -22,4 +22,7 @@ public interface TaskDAO {
 
     @Query("SELECT * FROM tasks where category_id = :categoryId")
     List<Task> getTasksByCategoryId(int categoryId);
+
+    @Query("SELECT * FROM tasks where date = :date")
+    List<Task> getTasksByDate(String date);
 }
