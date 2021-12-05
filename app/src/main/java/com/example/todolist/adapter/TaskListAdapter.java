@@ -1,6 +1,7 @@
 package com.example.todolist.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,16 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
+import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.DateItem;
 import com.example.todolist.GeneralItem;
 import com.example.todolist.ListItem;
 import com.example.todolist.R;
 import com.example.todolist.RecyclerViewClickListener;
+import com.example.todolist.common.AppDatabase;
+import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Task;
 
 import java.util.ArrayList;
@@ -121,13 +126,19 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
         switch (holder.getItemViewType()) {
             case ListItem.TYPE_GENERAL:
                 GeneralItem generalItem = (GeneralItem) consolidatedList.get(position);
                 GeneralViewHolder generalViewHolder = (GeneralViewHolder) holder;
                 generalViewHolder.tvTitle.setText(generalItem.getTask().getTitle());
-                generalViewHolder.tvTime.setText(generalItem.getTask().getStartTime() + "-" + generalItem.getTask().getEndTime());
+                String startTime = generalItem.getTask().getStartTime();
+                String endTime = generalItem.getTask().getEndTime();
+                String time = startTime + "-" + endTime;
+                if(!startTime.equals(Constant.START_TIME_DEFAULT) && !(endTime.equals(Constant.END_TIME_DEFAULT))) {
+                    generalViewHolder.tvTime.setText(time);
+                } else {
+                    generalViewHolder.tvTime.setText(Constant.ALL_DAY);
+                }
                 if (generalItem.getTask().getRing().matches("")) {
                     generalViewHolder.tvRing.setVisibility(View.GONE);
                 }
@@ -149,7 +160,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 break;
         }
     }
-
 
     //ViewHolder for date row item
     class DateViewHolder extends RecyclerView.ViewHolder {
@@ -175,6 +185,41 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvRing = itemView.findViewById(R.id.tv_ring);
             tvView = itemView.findViewById(R.id.tv_view);
             cbDone = itemView.findViewById(R.id.cb_done);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    int index = getAdapterPosition();
+//                    Task task = taskList.get(index);
+//                    Intent intent =new Intent(itemView.getContext(), )
+                }
+            });
+
+            tvView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            cbDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int index = getAdapterPosition();
+                    Context context = itemView.getContext();
+                    AppDatabase db = Room
+                            .databaseBuilder(context, AppDatabase.class, "todoDB")
+                            .allowMainThreadQueries()
+                            .build();
+                    TaskDAO taskDAO = db.taskDAO();
+                    GeneralItem generalItem = (GeneralItem) consolidatedList.get(index);
+                    if (cbDone.isChecked()) {
+                        taskDAO.updateTaskById(1, generalItem.getTask().getId());
+                    } else {
+                        taskDAO.updateTaskById(0, generalItem.getTask().getId());
+                    }
+                }
+            });
         }
     }
 

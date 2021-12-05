@@ -253,7 +253,7 @@
         <!--    mặc định là giờ hiện tại-->
         <EditText
             android:id="@+id/edt_ring"
-            android:layout_width="0dp"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="17dp"
             android:editable="false"
