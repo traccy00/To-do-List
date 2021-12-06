@@ -2,6 +2,7 @@ package com.example.todolist;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
+import com.example.todolist.DAO.TaskDAO;
+import com.example.todolist.common.AppDatabase;
+import com.example.todolist.common.Constant;
+import com.example.todolist.common.Enums;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.charts.HorizontalBarChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
@@ -28,7 +33,9 @@ import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -45,7 +52,8 @@ public class MeFragment extends Fragment {
     private static final int MAX_Y_VALUE = 100;
     private static final int MIN_Y_VALUE = 0;
     private static final String SET_LABEL = "Task Complete %";
-    private static final String[] DAYS = { "SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT" };
+    private static final String[] DAYS = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
+    private int LAST_7_DAYS = -7;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -98,12 +106,13 @@ public class MeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //pieChart
         pieChart = view.findViewById(R.id.piechart);
         setupPieChart();
         loadPieChartData();
-
+        //barChart
         barChart = view.findViewById(R.id.barchart);
-        BarData data = createChartData();
+        BarData data = getBarChartData();
         configureChartAppearance();
         prepareChartData(data);
     }
@@ -127,8 +136,8 @@ public class MeFragment extends Fragment {
 
     private void loadPieChartData() {
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(0.7f, "Completed"));
-        entries.add(new PieEntry(0.3f, "Not completed"));
+        entries.add(new PieEntry(0.7f, Enums.TaskStatus.COMPLETED.getTaskStatus()));
+        entries.add(new PieEntry(0.3f, Enums.TaskStatus.NOT_COMPLETED.getTaskStatus()));
 
         List<Integer> colors = new ArrayList<>();
         for (int color : ColorTemplate.MATERIAL_COLORS) {
@@ -156,31 +165,47 @@ public class MeFragment extends Fragment {
 
     private void configureChartAppearance() {
         barChart.getDescription().setEnabled(false);
-        barChart.setDrawValueAboveBar(false);
-
+        barChart.setDrawValueAboveBar(true);
+        //XAxis bottom
         XAxis xAxis = barChart.getXAxis();
         xAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
-                return DAYS[(int) value];
+//                return DAYS[(int) value];
+//                List<String> dateList = getLast7Days();
+                return getLast7Days().get((int) value);
             }
         });
-
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setLabelRotationAngle(-90);
+        //YAxis left
         YAxis axisLeft = barChart.getAxisLeft();
         axisLeft.setGranularity(10f);
         axisLeft.setAxisMinimum(0);
-
-        YAxis axisRight = barChart.getAxisRight();
-        axisRight.setGranularity(10f);
-        axisRight.setAxisMinimum(0);
+        //YAxis Right
+        barChart.getAxisRight().setEnabled(false);
     }
 
-    private BarData createChartData() {
+    private BarData getBarChartData() {
         ArrayList<BarEntry> values = new ArrayList<>();
-        for (int i = 0; i < MAX_X_VALUE; i++) {
-            float x = i;
-            float y = 90;//new Util().randomFloatBetween(MIN_Y_VALUE, MAX_Y_VALUE);
-            values.add(new BarEntry(x, y));
+        //find last 7 days
+        List<String> dateList = getLast7Days();
+        //get task info in 7 days
+        AppDatabase db = Room.databaseBuilder(this.getContext(), AppDatabase.class, Constant.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build();
+        TaskDAO taskDAO = db.taskDAO();
+        float i = 0;
+        for (String date : dateList) {
+            //task percent completed
+            int countAllTaskInDate = taskDAO.countAllTasksInDate(date);
+            int countCompletedTaskInDate = taskDAO.countIsDoneTasksInDate(date, 1);
+            float percentCompleted = 0f;
+            if (countAllTaskInDate != 0) {
+                percentCompleted = ((float) (countCompletedTaskInDate) / (float) countAllTaskInDate) * 100;
+            }
+            values.add(new BarEntry(i, percentCompleted));
+            i++;
         }
         BarDataSet set1 = new BarDataSet(values, SET_LABEL);
         ArrayList<IBarDataSet> dataSets = new ArrayList<>();
@@ -195,5 +220,22 @@ public class MeFragment extends Fragment {
         barChart.setDoubleTapToZoomEnabled(false);
         barChart.setData(data);
         barChart.invalidate();
+    }
+
+    private List<String> getLast7Days() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, LAST_7_DAYS);
+        List<String> dateList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String dateInLast7Days = "";
+        for (int i = 0; i <= 6; i++) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            dateInLast7Days = sdf.format(calendar.getTime());
+            if (dateInLast7Days.startsWith("0")) {
+                dateInLast7Days = dateInLast7Days.substring(1);
+            }
+            dateList.add(dateInLast7Days);
+        }
+        return dateList;
     }
 }

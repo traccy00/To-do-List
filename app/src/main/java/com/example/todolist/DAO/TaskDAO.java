@@ -25,4 +25,11 @@ public interface TaskDAO {
 
     @Query("SELECT * FROM tasks where date = :date")
     List<Task> getTasksByDate(String date);
+
+    @Query("SELECT count(*) FROM tasks where date like :date")
+    int countAllTasksInDate(String date);
+
+    @Query("SELECT count(*) FROM tasks where date like :date and is_done = :isDone")
+    int countIsDoneTasksInDate(String date, int isDone);
+
 }
