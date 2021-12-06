@@ -21,4 +21,9 @@ public class Utils {
         return s[0];
     }
 
+    public String formatDate(Calendar calendar) {
+        String date = "";
+        return date;
+    }
+
 }
