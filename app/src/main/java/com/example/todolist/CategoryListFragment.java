@@ -129,6 +129,8 @@ public class CategoryListFragment extends Fragment implements RecyclerViewClickL
                                 if (category == null) {
                                     //create category
                                     categoryDAO.createCategory(nameBox.getText().toString());
+                                } else {
+                                    Toast.makeText(view.getContext(), "This name already exist", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         })

@@ -2,6 +2,8 @@
     <string name="app_name">Todo List</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="all_day">All day</string>
+    <string name="btn_create_category">+ Add more</string>
     <string-array name="twentyfour_hourclock">
         <item>am</item>
         <item>pm</item>

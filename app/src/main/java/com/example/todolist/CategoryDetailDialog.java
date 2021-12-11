@@ -20,7 +20,7 @@ import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
 
-public class CategoryDetailDialog extends AppCompatDialogFragment implements RecyclerViewClickListener{
+public class CategoryDetailDialog extends AppCompatDialogFragment {
 
     private int categoryId;
 
@@ -66,15 +66,5 @@ public class CategoryDetailDialog extends AppCompatDialogFragment implements Rec
                     }
                 });
         return builder.create();
-    }
-
-    @Override
-    public void onCategoryClick(int categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    @Override
-    public void onTaskClick(int taskId) {
-
     }
 }
