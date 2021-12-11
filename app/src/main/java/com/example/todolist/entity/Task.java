@@ -3,11 +3,15 @@ package com.example.todolist.entity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Room;
 
+import com.example.todolist.common.AppDatabase;
+
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity(tableName = "tasks")
-public class Task {
+public class Task implements Serializable {
     @PrimaryKey
     @ColumnInfo(name = "id")
     private int id;
@@ -121,5 +125,10 @@ public class Task {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    @Override
+    public String toString() {
+      return getCategoryId() + "";
     }
 }

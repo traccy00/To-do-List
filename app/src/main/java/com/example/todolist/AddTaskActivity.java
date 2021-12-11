@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -37,17 +36,14 @@ import com.example.todolist.common.Constant;
 import com.example.todolist.common.Utils;
 import com.example.todolist.entity.Category;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-//implements AdapterView.OnItemSelectedListener
 public class AddTaskActivity extends AppCompatActivity implements RecyclerViewClickListener {
     private static final int SPEECH_REQUEST_CODE = 0;
     private static final int SPEECH_REQUEST_CODE_1 = 1;
 
     private EditText edtDate, edtStartTime, edtEndTime, edtDescription, edtTitle, edtRing;
-    //    Spinner spinner1, spinner2;
     private int selectedHour, selectedMinutes;
     private String lastSetTime;
     private CheckBox allDay;
@@ -70,12 +66,12 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
 
         edtTitle = findViewById(R.id.edt_title);
         edtDate = findViewById(R.id.edt_date);
-        edtStartTime = findViewById(R.id.edt_start_time);
-        edtEndTime = findViewById(R.id.edt_end_time);
+        edtStartTime = findViewById(R.id.edt_start_time_sheet);
+        edtEndTime = findViewById(R.id.edt_end_time_sheet);
         edtDescription = findViewById(R.id.edt_description);
         edtRing = findViewById(R.id.edt_ring);
         allDay = findViewById(R.id.checkBox);
-        btnAddTime = findViewById(R.id.btn_add_time);
+        btnAddTime = findViewById(R.id.btn_add_time_sheet);
         switchRing = findViewById(R.id.switch1);
         edtRing.setEnabled(false);
         btnSpeechDescription = findViewById(R.id.btn_speech_description);
@@ -125,30 +121,6 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
                 }
             }
         });
-
-
-//        spinner1 = findViewById(R.id.spinner1);
-//        spinner2 = findViewById(R.id.spinner2);
-//        //create an ArrayAdapter using the string array and a default spinner layout
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter
-//                .createFromResource(this, R.array.twentyfour_hourclock, android.R.layout.simple_spinner_item);
-//        //specify which layout use array
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        //apply adapter to spinner
-//        spinner1.setAdapter(adapter);
-//        spinner2.setAdapter(adapter);
-//        spinner1.setSelection(0);
-//        spinner1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-////                String valueSelected =
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
-//            }
-//        });
 
         //scroll view for EditText edtDescription
         edtDescription.setScroller(new Scroller(getApplicationContext()));
@@ -288,7 +260,6 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
         taskDAO.createTask(title, date, startTime, endTime, description, ring, 0, categoryId);
 
         Toast.makeText(getApplicationContext(), "Add task successfully", Toast.LENGTH_SHORT).show();
-//        Log.d("myapp", Log.getStackTraceString(new Exception()));
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
@@ -367,17 +338,4 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
     public void onTaskClick(int taskId) {
 
     }
-
-
-    //    @Override
-//    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-////        spinner1.setOnItemSelectedListener(this);
-//         parent.getItemAtPosition(position);
-//    }
-//
-//    @Override
-//    public void onNothingSelected(AdapterView<?> parent) {
-//
-//    }
-
 }

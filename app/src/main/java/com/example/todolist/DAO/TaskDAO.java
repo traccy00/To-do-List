@@ -32,4 +32,16 @@ public interface TaskDAO {
     @Query("SELECT count(*) FROM tasks where date like :date and is_done = :isDone")
     int countIsDoneTasksInDate(String date, int isDone);
 
+    @Query("SELECT * from tasks where id = :id")
+    Task getById(int id);
+
+    @Query("UPDATE tasks SET title = :updateTitle, date = :updateDate, start_time = :updateStartTime, " +
+            "end_time = :updateEndTime, description = :updateDescription, ring = :updateRing, " +
+            "category_id = :updateCategoryId where id = :taskId")
+    void updateTaskDetail(int taskId, String updateTitle, String updateDate, String updateStartTime,
+                          String updateEndTime, String updateDescription, String updateRing,
+                          int updateCategoryId);
+
+    @Query("DELETE FROM tasks where id = :taskId")
+    void deleteById(int taskId);
 }

@@ -1,6 +1,9 @@
 package com.example.todolist;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,11 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -27,8 +33,11 @@ import com.example.todolist.adapter.TaskListAdapter;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.entity.Category;
 import com.example.todolist.entity.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -95,6 +104,7 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
         return inflater.inflate(R.layout.fragment_task_list, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -124,17 +134,13 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
             }
         }
         taskListAdapter = new TaskListAdapter(this.getContext(), consolidatedList,
-                TaskListFragment.this, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //get task detail by task id
-            }
-        }, "TaskListFragment");
-
+                TaskListFragment.this,"TaskListFragment");
         //category list
         rvCategoryList = view.findViewById(R.id.rv_categories);
         CategoryDAO categoryDAO = db.categoryDAO();
         categoryList = categoryDAO.getAll();
+        categoryList.add(new Category(0, "All"));
+        Collections.sort(categoryList, (o1, o2) -> o1.getId() < o2.getId() ? -1 : 1);
         //get category id
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList,
                 TaskListFragment.this, "TaskListFragment");
@@ -156,6 +162,7 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
             }
         });
     }
+
     boolean doubleBackToExit = false;
 
 //    @Override
@@ -207,31 +214,33 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
     public void onCategoryClick(int categoryId) {
         Context context = this.getContext();
         this.categoryId = categoryId;
+        AppDatabase db = Room
+                .databaseBuilder(context, AppDatabase.class, "todoDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        TaskDAO taskDAO = db.taskDAO();
         if (categoryId != 0) {
-            AppDatabase db = Room
-                    .databaseBuilder(context, AppDatabase.class, "todoDB")
-                    .allowMainThreadQueries()
-                    .fallbackToDestructiveMigration()
-                    .build();
-            TaskDAO taskDAO = db.taskDAO();
             taskList = taskDAO.getTasksByCategoryId(categoryId);
-            HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
-            List<ListItem> consolidatedList = new ArrayList<>();
-            for (String date : groupedHashMap.keySet()) {
-                DateItem dateItem = new DateItem();
-                dateItem.setDate(date);
-                consolidatedList.add(dateItem);
-                for (Task task : groupedHashMap.get(date)) {
-                    GeneralItem generalItem = new GeneralItem();
-                    generalItem.setTask(task);
-                    consolidatedList.add(generalItem);
-                }
-            }
-            taskListAdapter = new TaskListAdapter(this.getContext(), consolidatedList,
-                    TaskListFragment.this, "TaskListFragment");
-            rvTaskList.setLayoutManager(new LinearLayoutManager(context));
-            rvTaskList.setAdapter(taskListAdapter);
+        } else {
+            taskList = taskDAO.getAll();
         }
+        HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
+        List<ListItem> consolidatedList = new ArrayList<>();
+        for (String date : groupedHashMap.keySet()) {
+            DateItem dateItem = new DateItem();
+            dateItem.setDate(date);
+            consolidatedList.add(dateItem);
+            for (Task task : groupedHashMap.get(date)) {
+                GeneralItem generalItem = new GeneralItem();
+                generalItem.setTask(task);
+                consolidatedList.add(generalItem);
+            }
+        }
+        taskListAdapter = new TaskListAdapter(this.getContext(), consolidatedList,
+                TaskListFragment.this, "TaskListFragment");
+        rvTaskList.setLayoutManager(new LinearLayoutManager(context));
+        rvTaskList.setAdapter(taskListAdapter);
     }
 
     @Override

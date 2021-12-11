@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,12 +8,12 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="413dp"
-            android:layout_height="0dp"
+            android:id="@+id/cl_head"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/background"
             android:orientation="vertical"
             android:padding="20dp"
@@ -24,12 +24,9 @@
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="321dp"
-                android:background="@drawable/ic_baseline_back"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:background="@drawable/circle_for_vector"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,11 +34,11 @@
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="2dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="336dp"
+                android:fontFamily="@font/sourcesans_regular"
                 android:text="Title"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/white"
+                android:textSize="11dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/button" />
 
@@ -50,20 +47,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="334dp"
+                android:fontFamily="@font/sourcesans_regular"
                 android:text="Date"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/white"
+                android:textSize="11sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/edt_title" />
 
             <EditText
                 android:id="@+id/edt_date"
-                android:layout_width="231dp"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
                 android:layout_weight="1"
                 android:enabled="false"
-                app:layout_constraintEnd_toStartOf="@+id/btn_calendar"
+                android:fontFamily="@font/sourcesans_regular"
+                android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -71,24 +69,23 @@
                 android:id="@+id/btn_calendar"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="48dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/ic_baseline_calendar"
                 android:onClick="getDate"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_date"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/edt_date"
                 app:layout_constraintTop_toTopOf="@+id/edt_date" />
 
             <EditText
                 android:id="@+id/edt_title"
-                android:layout_width="236dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
+                android:layout_width="250dp"
+                android:layout_height="49dp"
+                android:fontFamily="@font/sourcesans_regular"
                 android:hint="Add title"
                 android:maxLines="1"
                 android:text=""
-                app:layout_constraintEnd_toStartOf="@+id/button3"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
@@ -96,249 +93,248 @@
                 android:id="@+id/button3"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="46dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/ic_baseline_voice"
                 android:onClick="onSpeech1"
                 app:layout_constraintBottom_toBottomOf="@+id/edt_title"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/edt_title"
                 app:layout_constraintTop_toTopOf="@+id/edt_title" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="287dp"
-            android:text="All day"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <Button
-            android:id="@+id/btn_add_time"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginTop="68dp"
-            android:background="@drawable/button_background"
-            android:editable="false"
-            android:text="Add time"
-            android:textAllCaps="false"
-            app:layout_constraintStart_toStartOf="@+id/checkBox"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <TextView
-            android:id="@+id/tv_start_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="17dp"
-            android:text="Start time"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox"
-            app:layout_constraintVertical_bias="0.007" />
-
-        <!--    <Spinner-->
-        <!--        android:id="@+id/spinner1"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        app:layout_constraintBottom_toBottomOf="@+id/edt_start_time"-->
-        <!--        app:layout_constraintEnd_toStartOf="@+id/edt_end_time"-->
-        <!--        app:layout_constraintHorizontal_bias="0.5"-->
-        <!--        app:layout_constraintStart_toEndOf="@+id/edt_start_time"-->
-        <!--        app:layout_constraintTop_toTopOf="@+id/edt_start_time" />-->
-
-
-        <!--    <Spinner-->
-        <!--        android:id="@+id/spinner2"-->
-        <!--        android:layout_width="wrap_content"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        app:layout_constraintBottom_toBottomOf="@+id/edt_end_time"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.5"-->
-        <!--        app:layout_constraintStart_toEndOf="@+id/edt_end_time"-->
-        <!--        app:layout_constraintTop_toTopOf="@+id/edt_end_time"-->
-        <!--        app:layout_constraintVertical_bias="0.476" />-->
-
-        <EditText
-            android:id="@+id/edt_start_time"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:editable="false"
-            android:ems="10"
-            android:onClick="getStartTime"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_start_time"
-            app:layout_constraintStart_toEndOf="@+id/tv_start_time"
-            app:layout_constraintTop_toTopOf="@+id/tv_start_time" />
-
-        <TextView
-            android:id="@+id/tv_end_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="68dp"
-            android:text="End time"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/edt_start_time"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <EditText
-            android:id="@+id/edt_end_time"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:onClick="getEndTime"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_end_time"
-            app:layout_constraintStart_toEndOf="@+id/tv_end_time"
-            app:layout_constraintTop_toTopOf="@+id/tv_end_time" />
-
-        <EditText
-            android:id="@+id/edt_description"
-            android:layout_width="289dp"
-            android:layout_height="113dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginBottom="18dp"
-            android:background="@drawable/edittext_background"
-            android:gravity="top"
-            android:hint="Add description"
-            android:inputType="text|textMultiLine"
-            android:maxLength="1000"
-            android:padding="5dp"
-            android:scrollbars="horizontal"
-            app:layout_constraintBottom_toTopOf="@+id/edt_ring"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <Button
-            android:id="@+id/btn_speech_description"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginTop="120dp"
-            android:layout_marginBottom="102dp"
-            android:width="32dp"
-            android:height="32dp"
-            android:background="@drawable/ic_baseline_voice"
-            android:onClick="onSpeech"
-            app:layout_constraintBottom_toTopOf="@+id/switch1"
-            app:layout_constraintStart_toEndOf="@+id/edt_description"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/ic_baseline_notifications"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edt_description"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <!--    mặc định là giờ hiện tại-->
-        <EditText
-            android:id="@+id/edt_ring"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="17dp"
-            android:editable="false"
-            android:focusable="false"
-            android:inputType="textPersonName"
-            android:onClick="getRingTime"
-            android:text="4:00"
-            app:layout_constraintBottom_toBottomOf="@+id/textView3"
-            app:layout_constraintStart_toEndOf="@+id/textView3"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
-
-        <Switch
-            android:id="@+id/switch1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="33dp"
-            app:layout_constraintBottom_toBottomOf="@+id/edt_ring"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/edt_ring" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/ic_baseline_repeat"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <EditText
-            android:id="@+id/textView5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:editable="false"
-            android:inputType="none"
-            android:text="No repeat"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView4"
-            app:layout_constraintStart_toStartOf="@+id/edt_ring"
-            app:layout_constraintTop_toTopOf="@+id/textView4" />
-
-        <Spinner
-            android:id="@+id/spinner3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Category"
-            app:layout_constraintStart_toStartOf="@+id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_categories_2"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            android:padding="20dp"
+            android:background="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/cl_head">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:layout_marginStart="346dp"
-            android:layout_marginEnd="178dp"
-            android:onClick="onInsertTask"
-            android:src="@drawable/ic_baseline_add"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_categories_2" />
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_day"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_add_time_sheet"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_background"
+                android:editable="false"
+                android:text="Add time"
+                android:textAllCaps="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+            <TextView
+                android:id="@+id/tv_start_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Start time"
+                android:textSize="11sp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+            <!--    <Spinner-->
+            <!--        android:id="@+id/spinner1"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        app:layout_constraintBottom_toBottomOf="@+id/edt_start_time"-->
+            <!--        app:layout_constraintEnd_toStartOf="@+id/edt_end_time"-->
+            <!--        app:layout_constraintHorizontal_bias="0.5"-->
+            <!--        app:layout_constraintStart_toEndOf="@+id/edt_start_time"-->
+            <!--        app:layout_constraintTop_toTopOf="@+id/edt_start_time" />-->
+
+
+            <!--    <Spinner-->
+            <!--        android:id="@+id/spinner2"-->
+            <!--        android:layout_width="wrap_content"-->
+            <!--        android:layout_height="wrap_content"-->
+            <!--        app:layout_constraintBottom_toBottomOf="@+id/edt_end_time"-->
+            <!--        app:layout_constraintEnd_toEndOf="parent"-->
+            <!--        app:layout_constraintHorizontal_bias="0.5"-->
+            <!--        app:layout_constraintStart_toEndOf="@+id/edt_end_time"-->
+            <!--        app:layout_constraintTop_toTopOf="@+id/edt_end_time"-->
+            <!--        app:layout_constraintVertical_bias="0.476" />-->
+
+            <EditText
+                android:id="@+id/edt_start_time_sheet"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:editable="false"
+                android:ems="10"
+                android:onClick="getStartTime"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_start_time"
+                app:layout_constraintStart_toEndOf="@+id/tv_start_time"
+                app:layout_constraintTop_toTopOf="@+id/tv_start_time" />
+
+            <TextView
+                android:id="@+id/tv_end_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="68dp"
+                android:text="End time"
+                android:textSize="11sp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_start_time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@+id/edt_start_time_sheet" />
+
+            <EditText
+                android:id="@+id/edt_end_time_sheet"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:editable="false"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:onClick="getEndTime"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_end_time"
+                app:layout_constraintStart_toEndOf="@+id/tv_end_time"
+                app:layout_constraintTop_toTopOf="@+id/tv_end_time" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="Description"
+                android:textSize="11dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/checkBox" />
+
+            <EditText
+                android:id="@+id/edt_description"
+                android:layout_width="match_parent"
+                android:layout_height="113dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/description_edt_background"
+                android:gravity="top"
+                android:hint="Add description"
+                android:inputType="text|textMultiLine"
+                android:maxLength="1000"
+                android:padding="5dp"
+                android:scrollbars="horizontal"
+                app:layout_constraintEnd_toStartOf="@+id/btn_speech_description"
+                app:layout_constraintHorizontal_bias="0.628"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_description" />
+
+            <Button
+                android:id="@+id/btn_speech_description"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:width="32dp"
+                android:height="32dp"
+                android:background="@drawable/ic_baseline_voice"
+                android:onClick="onSpeech"
+                app:layout_constraintEnd_toEndOf="@id/edt_description"
+                app:layout_constraintTop_toTopOf="@+id/edt_description" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_baseline_notifications"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/edt_description"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <!--    mặc định là giờ hiện tại-->
+            <EditText
+                android:id="@+id/edt_ring"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:editable="false"
+                android:focusable="false"
+                android:inputType="textPersonName"
+                android:onClick="getRingTime"
+                android:text="4:00"
+                app:layout_constraintBottom_toBottomOf="@+id/textView3"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+            <Switch
+                android:id="@+id/switch1"
+                style="@style/Widget.AppCompat.CompoundButton.Switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toBottomOf="@+id/edt_ring"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/edt_ring" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/ic_baseline_repeat"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:editable="false"
+                android:inputType="none"
+                android:text="No repeat"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/textView4"
+                app:layout_constraintStart_toStartOf="@+id/edt_ring"
+                app:layout_constraintTop_toTopOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Category"
+                android:textSize="11sp"
+                app:layout_constraintStart_toStartOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_categories_2"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <Button
+                android:id="@+id/floatingActionButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/sourcesans_regular"
+                android:background="@drawable/create_task_btn_background"
+                android:onClick="onInsertTask"
+                android:text="Create new task"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textAllCaps="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/rv_categories_2" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</FrameLayout>
