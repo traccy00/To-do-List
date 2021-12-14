@@ -15,6 +15,7 @@ import com.example.todolist.R;
 import com.example.todolist.RecyclerViewClickListener;
 import com.example.todolist.entity.Category;
 
+import java.text.ParseException;
 import java.util.List;
 
 public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.MyViewHolder> {
@@ -76,16 +77,32 @@ public class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapte
                     selectedPos = holder.getLayoutPosition();//giá trị được click mới
                     if (saveLastSelectedPos == selectedPos) {//category deselect nghĩa là không được chọn
                         selectedPos = -1;//ko category nao dc chon
-                        recyclerViewClickListener.onCategoryClick(0);
+                        try {
+                            recyclerViewClickListener.onCategoryClick(0);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     } else {
-                        recyclerViewClickListener.onCategoryClick(category.getId());
+                        try {
+                            recyclerViewClickListener.onCategoryClick(category.getId());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                     }
                     notifyDataSetChanged();
                 } else if (className.equals("CategoryListFragment")) {
-                    recyclerViewClickListener.onCategoryClick(category.getId());
+                    try {
+                        recyclerViewClickListener.onCategoryClick(category.getId());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     holder.itemView.setOnClickListener(itemClickListener);
                 } else if(className.equals("TaskListFragment")) {
-                    recyclerViewClickListener.onCategoryClick(category.getId());
+                    try {
+                        recyclerViewClickListener.onCategoryClick(category.getId());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });

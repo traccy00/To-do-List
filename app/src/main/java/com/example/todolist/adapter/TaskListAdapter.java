@@ -34,8 +34,11 @@ import com.example.todolist.entity.Category;
 import com.example.todolist.entity.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -120,7 +123,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case ListItem.TYPE_DATE:
                 DateItem dateItem = (DateItem) consolidatedList.get(position);
                 DateViewHolder dateViewHolder = (DateViewHolder) holder;
-                dateViewHolder.txtTitle.setText(dateItem.getDate());
+                if(className.equals("CalendarFragment")) {
+                    dateViewHolder.txtTitle.setVisibility(View.GONE);
+                }
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                dateViewHolder.txtTitle.setText(df.format(dateItem.getDate()));
                 break;
         }
     }

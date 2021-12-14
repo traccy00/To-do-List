@@ -1,14 +1,16 @@
 package com.example.todolist;
 
+import java.util.Date;
+
 public class DateItem extends ListItem {
 
-    private String date;
+    private Date date;
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

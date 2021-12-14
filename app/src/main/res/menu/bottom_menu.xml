@@ -4,17 +4,17 @@
     <item
         android:id="@+id/taskListFragment"
         android:icon="@drawable/ic_baseline_sticky_note"
-        android:title="Tasks" />
+        android:title="@string/menu_tasks" />
     <item
         android:id="@+id/calendarFragment"
         android:icon="@drawable/ic_baseline_calendar"
-        android:title="Calendar" />
+        android:title="@string/menu_calendar" />
     <item
         android:id="@+id/meFragment"
         android:icon="@drawable/ic_baseline_person"
-        android:title="Me" />
+        android:title="@string/menu_me" />
     <item
         android:id="@+id/settingFragment"
         android:icon="@drawable/ic_baseline_settings"
-        android:title="Settings" />
+        android:title="@string/meu_settings" />
 </menu>
