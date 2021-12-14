@@ -21,10 +21,17 @@ import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Task;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -37,6 +44,8 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
     private TaskListAdapter taskListAdapter;
     private RecyclerView rvTaskList;
     private List<Task> taskList;
+    private TextView tvCalendarDate;
+    private TextView tvNoTask;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,6 +110,13 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
         super.onViewCreated(view, savedInstanceState);
         calendarView = view.findViewById(R.id.cv_calendar);
         rvTaskList = view.findViewById(R.id.rv_tasks);
+        tvCalendarDate = view.findViewById(R.id.tv_calendar_date);
+        tvNoTask = view.findViewById(R.id.tv_notask);
+
+        tvNoTask.setVisibility(View.GONE);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String selectedDate = sdf.format(new Date(calendarView.getDate()));
+        tvCalendarDate.setText(selectedDate);
 
         AppDatabase db = Room.databaseBuilder(view.getContext(), AppDatabase.class, Constant.DATABASE_NAME)
                 .allowMainThreadQueries()
@@ -108,10 +124,15 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
                 .build();
         TaskDAO taskDAO = db.taskDAO();
         taskList = taskDAO.getTasksByDate(getTodayDate());
-        HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
+        Map<Date, List<Task>> groupedHashMap = null;
+        try {
+            groupedHashMap = groupDataIntoHashMap(taskList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         List<ListItem> consolidatedList = new ArrayList<>();
 
-        for (String dateTask : groupedHashMap.keySet()) {
+        for (Date dateTask : groupedHashMap.keySet()) {
             DateItem dateItem = new DateItem();
             dateItem.setDate(dateTask);
             consolidatedList.add(dateItem);
@@ -130,23 +151,31 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
         }, "CalendarFragment");
         rvTaskList.setLayoutManager(new LinearLayoutManager(context));
         rvTaskList.setAdapter(taskListAdapter);
-
+        //for default initial select date
+        if (consolidatedList.isEmpty()) {
+            tvNoTask.setVisibility(View.VISIBLE);
+        }
         //change date
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
-
+                tvCalendarDate.setText(selectedDate);
                 AppDatabase db = Room.databaseBuilder(view.getContext(), AppDatabase.class, Constant.DATABASE_NAME)
                         .allowMainThreadQueries()
                         .fallbackToDestructiveMigration()
                         .build();
                 TaskDAO taskDAO = db.taskDAO();
                 taskList = taskDAO.getTasksByDate(selectedDate);
-                HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
+                Map<Date, List<Task>> groupedHashMap = null;
+                try {
+                    groupedHashMap = groupDataIntoHashMap(taskList);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 List<ListItem> consolidatedList = new ArrayList<>();
 
-                for (String dateTask : groupedHashMap.keySet()) {
+                for (Date dateTask : groupedHashMap.keySet()) {
                     DateItem dateItem = new DateItem();
                     dateItem.setDate(dateTask);
                     consolidatedList.add(dateItem);
@@ -155,6 +184,12 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
                         generalItem.setTask(task);
                         consolidatedList.add(generalItem);
                     }
+                }
+
+                if (consolidatedList.isEmpty()) {
+                    tvNoTask.setVisibility(View.VISIBLE);
+                } else {
+                    tvNoTask.setVisibility(View.GONE);
                 }
                 //change date
                 taskListAdapter = new TaskListAdapter(context, consolidatedList,
@@ -181,13 +216,14 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
         //get task id
     }
 
-    private HashMap<String, List<Task>> groupDataIntoHashMap(List<Task> taskList) {
-
-        HashMap<String, List<Task>> groupedHashMap = new HashMap<>();
+    private Map<Date, List<Task>> groupDataIntoHashMap(List<Task> taskList) throws ParseException {
+        Collections.sort(taskList, (t1, t2) -> convertStringToLong(t1.getDate()) > convertStringToLong(t2.getDate()) ? 1 : -1);
+        HashMap<Date, List<Task>> groupedHashMap = new HashMap<>();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         for (Task task : taskList) {
 
-            String hashMapKey = task.getDate();
+            Date hashMapKey = new java.sql.Date(dateFormat.parse(task.getDate()).getTime());
 
             if (groupedHashMap.containsKey(hashMapKey)) {
                 groupedHashMap.get(hashMapKey).add(task);
@@ -197,6 +233,25 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
                 groupedHashMap.put(hashMapKey, list);
             }
         }
-        return groupedHashMap;
+        Map<Date, List<Task>> m1 = new TreeMap<>(groupedHashMap);
+//        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//
+//        for (Map.Entry<Date, List<Task>> entry : m1.entrySet()) {
+//            Log.i("TaskListFragment", "datee" + df.format(entry.getKey()));
+//        }
+        return m1;
+    }
+
+    public long convertStringToLong(String dateString) {
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        long milliseconds = 0;
+        try {
+            Date d = f.parse(dateString);
+            milliseconds = d.getTime();
+        } catch (Exception e) {
+//            throw e;
+            e.printStackTrace();
+        }
+        return milliseconds;
     }
 }

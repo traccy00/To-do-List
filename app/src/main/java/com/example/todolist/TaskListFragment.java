@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +32,24 @@ import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.adapter.CategoryListAdapter;
 import com.example.todolist.adapter.TaskListAdapter;
 import com.example.todolist.common.AppDatabase;
+import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
 import com.example.todolist.entity.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -120,21 +130,38 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
         TaskDAO taskDAO = db.taskDAO();
         taskList = taskDAO.getAll();
 
-        HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
+        Map<Date, List<Task>> groupedHashMap = null;
+        try {
+            groupedHashMap = groupDataIntoHashMap(taskList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         List<ListItem> consolidatedList = new ArrayList<>();
-
-        for (String date : groupedHashMap.keySet()) {
+        Calendar calendar = Calendar.getInstance();
+        String today = calendar.get(Calendar.DAY_OF_MONTH) + "/" + (calendar.get(Calendar.MONTH) + 1) + "/" + calendar.get(Calendar.YEAR);
+        boolean find = false;
+        int position = 0;
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        for (Date date : groupedHashMap.keySet()) {
+            String test = df.format(date);
+            if(test.equals(today)) {
+                find = true;
+            }
             DateItem dateItem = new DateItem();
             dateItem.setDate(date);
             consolidatedList.add(dateItem);
             for (Task task : groupedHashMap.get(date)) {
+                if (find == false) {
+                    position++;
+                }
                 GeneralItem generalItem = new GeneralItem();
                 generalItem.setTask(task);
                 consolidatedList.add(generalItem);
             }
         }
+        Log.i("position", position + "");
         taskListAdapter = new TaskListAdapter(this.getContext(), consolidatedList,
-                TaskListFragment.this,"TaskListFragment");
+                TaskListFragment.this, "TaskListFragment");
         //category list
         rvCategoryList = view.findViewById(R.id.rv_categories);
         CategoryDAO categoryDAO = db.categoryDAO();
@@ -145,7 +172,12 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
         CategoryListAdapter categoryListAdapter = new CategoryListAdapter(categoryList,
                 TaskListFragment.this, "TaskListFragment");
         //task list
-        rvTaskList.setLayoutManager(new LinearLayoutManager(context));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+        //get today
+
+        linearLayoutManager.scrollToPosition(position);
+
+        rvTaskList.setLayoutManager(linearLayoutManager);
         rvTaskList.setAdapter(taskListAdapter);
         rvCategoryList.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
         rvCategoryList.setAdapter(categoryListAdapter);
@@ -191,13 +223,14 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
 //        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 //    }
 
-    private HashMap<String, List<Task>> groupDataIntoHashMap(List<Task> taskList) {
-
-        HashMap<String, List<Task>> groupedHashMap = new HashMap<>();
+    private Map<Date, List<Task>> groupDataIntoHashMap(List<Task> taskList) throws ParseException {
+        Collections.sort(taskList, (t1, t2) -> convertStringToLong(t1.getDate()) > convertStringToLong(t2.getDate()) ? 1 : -1);
+        HashMap<Date, List<Task>> groupedHashMap = new HashMap<>();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
         for (Task task : taskList) {
 
-            String hashMapKey = task.getDate();
+            Date hashMapKey = new java.sql.Date(dateFormat.parse(task.getDate()).getTime());
 
             if (groupedHashMap.containsKey(hashMapKey)) {
                 groupedHashMap.get(hashMapKey).add(task);
@@ -207,15 +240,22 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
                 groupedHashMap.put(hashMapKey, list);
             }
         }
-        return groupedHashMap;
+//        Map<Date, List<Task>> m = new HashMap<Date, List<Task>>();
+        Map<Date, List<Task>> m1 = new TreeMap<>(groupedHashMap);
+//        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+//
+//        for (Map.Entry<Date, List<Task>> entry : m1.entrySet()) {
+//            Log.i("TaskListFragment", "datee" + df.format(entry.getKey()));
+//        }
+        return m1;
     }
 
     @Override
-    public void onCategoryClick(int categoryId) {
+    public void onCategoryClick(int categoryId) throws ParseException {
         Context context = this.getContext();
         this.categoryId = categoryId;
         AppDatabase db = Room
-                .databaseBuilder(context, AppDatabase.class, "todoDB")
+                .databaseBuilder(context, AppDatabase.class, Constant.DATABASE_NAME)
                 .allowMainThreadQueries()
                 .fallbackToDestructiveMigration()
                 .build();
@@ -225,9 +265,9 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
         } else {
             taskList = taskDAO.getAll();
         }
-        HashMap<String, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
+        Map<Date, List<Task>> groupedHashMap = groupDataIntoHashMap(taskList);
         List<ListItem> consolidatedList = new ArrayList<>();
-        for (String date : groupedHashMap.keySet()) {
+        for (Date date : groupedHashMap.keySet()) {
             DateItem dateItem = new DateItem();
             dateItem.setDate(date);
             consolidatedList.add(dateItem);
@@ -246,5 +286,19 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
     @Override
     public void onTaskClick(int taskId) {
         this.taskId = taskId;
+    }
+
+
+    public long convertStringToLong(String dateString) {
+        SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        long milliseconds = 0;
+        try {
+            Date d = f.parse(dateString);
+            milliseconds = d.getTime();
+        } catch (Exception e) {
+//            throw e;
+            e.printStackTrace();
+        }
+        return milliseconds;
     }
 }
