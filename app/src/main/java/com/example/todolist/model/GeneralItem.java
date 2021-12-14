@@ -1,8 +1,8 @@
-package com.example.todolist;
+package com.example.todolist.model;
 
 import com.example.todolist.entity.Task;
 
-public class GeneralItem extends ListItem{
+public class GeneralItem extends ListItem {
     private Task task;
 
     public Task getTask() {

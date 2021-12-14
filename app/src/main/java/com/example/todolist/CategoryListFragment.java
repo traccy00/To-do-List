@@ -23,6 +23,8 @@ import com.example.todolist.adapter.CategoryListAdapter;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
+import com.example.todolist.service.RecyclerViewClickListener;
+
 import android.widget.Toast;
 
 import java.util.List;

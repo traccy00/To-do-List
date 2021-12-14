@@ -2,13 +2,9 @@ package com.example.todolist;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +12,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 
 public class MainActivity extends AppCompatActivity {
 

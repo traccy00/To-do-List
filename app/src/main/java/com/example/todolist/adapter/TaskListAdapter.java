@@ -23,11 +23,11 @@ import androidx.room.Room;
 
 import com.example.todolist.DAO.CategoryDAO;
 import com.example.todolist.DAO.TaskDAO;
-import com.example.todolist.DateItem;
-import com.example.todolist.GeneralItem;
-import com.example.todolist.ListItem;
+import com.example.todolist.model.DateItem;
+import com.example.todolist.model.GeneralItem;
+import com.example.todolist.model.ListItem;
 import com.example.todolist.R;
-import com.example.todolist.RecyclerViewClickListener;
+import com.example.todolist.service.RecyclerViewClickListener;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
@@ -38,7 +38,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 

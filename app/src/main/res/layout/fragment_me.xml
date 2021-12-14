@@ -94,6 +94,7 @@
             android:layout_margin="20dp"
             android:background="@drawable/button_background"
             android:backgroundTint="#ebf4fe"
+            android:padding="15dp"
             app:layout_constraintBottom_toTopOf="@id/cl_piechart"
             app:layout_constraintTop_toBottomOf="@id/cl_barchart">
 
@@ -101,7 +102,9 @@
                 android:id="@+id/tv_quote"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="italic|bold"
                 android:text="Có công mài sắt có ngày nên kim"
+                android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -111,11 +114,14 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_piechart"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="310dp"
             android:layout_margin="20dp"
             android:background="@drawable/button_background"
             android:backgroundTint="#ebf4fe"
-            app:layout_constraintTop_toBottomOf="@+id/cl_quote">
+            android:paddingBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_quote"
+            tools:layout_editor_absoluteX="20dp">
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/piechart"
@@ -126,12 +132,23 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="Your all work"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <Spinner
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="255dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

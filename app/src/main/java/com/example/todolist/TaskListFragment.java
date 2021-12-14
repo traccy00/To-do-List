@@ -1,22 +1,14 @@
 package com.example.todolist;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -35,7 +27,10 @@ import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Category;
 import com.example.todolist.entity.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.example.todolist.model.DateItem;
+import com.example.todolist.model.GeneralItem;
+import com.example.todolist.model.ListItem;
+import com.example.todolist.service.RecyclerViewClickListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,12 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 import java.util.TreeMap;
 
 /**
@@ -223,7 +216,7 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
 //        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
 //    }
 
-    private Map<Date, List<Task>> groupDataIntoHashMap(List<Task> taskList) throws ParseException {
+    public Map<Date, List<Task>> groupDataIntoHashMap(List<Task> taskList) throws ParseException {
         Collections.sort(taskList, (t1, t2) -> convertStringToLong(t1.getDate()) > convertStringToLong(t2.getDate()) ? 1 : -1);
         HashMap<Date, List<Task>> groupedHashMap = new HashMap<>();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");

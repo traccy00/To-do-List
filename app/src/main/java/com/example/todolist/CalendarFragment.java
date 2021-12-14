@@ -20,6 +20,10 @@ import com.example.todolist.adapter.TaskListAdapter;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.entity.Task;
+import com.example.todolist.model.DateItem;
+import com.example.todolist.model.GeneralItem;
+import com.example.todolist.model.ListItem;
+import com.example.todolist.service.RecyclerViewClickListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -203,6 +207,7 @@ public class CalendarFragment extends Fragment implements RecyclerViewClickListe
                 rvTaskList.setAdapter(taskListAdapter);
             }
         });
+
 
     }
 
