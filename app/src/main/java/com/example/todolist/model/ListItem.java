@@ -1,4 +1,4 @@
-package com.example.todolist;
+package com.example.todolist.model;
 
 public abstract class ListItem {
     public static final int TYPE_DATE = 0;

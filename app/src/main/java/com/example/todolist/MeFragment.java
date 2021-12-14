@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +17,8 @@ import com.example.todolist.DAO.TaskDAO;
 import com.example.todolist.common.AppDatabase;
 import com.example.todolist.common.Constant;
 import com.example.todolist.common.Enums;
+import com.example.todolist.entity.Quote;
+import com.example.todolist.entity.Task;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -32,11 +35,23 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +69,9 @@ public class MeFragment extends Fragment {
     private static final String SET_LABEL = "Task Complete %";
     private static final String[] DAYS = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
     private int LAST_7_DAYS = -7;
+
+    private TextView tvQuote;
+    private List<Task> taskList;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -106,6 +124,15 @@ public class MeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tvQuote = view.findViewById(R.id.tv_quote);
+        Quote randomQuote = null;
+        try {
+            randomQuote = onGetRandomQuote();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        tvQuote.setText(randomQuote.getQuote() + " - " + randomQuote.getAuthor());
+
         //pieChart
         pieChart = view.findViewById(R.id.piechart);
         setupPieChart();
@@ -135,9 +162,35 @@ public class MeFragment extends Fragment {
     }
 
     private void loadPieChartData() {
+        AppDatabase db = Room
+                .databaseBuilder(this.getContext(), AppDatabase.class, "todoDB")
+                .allowMainThreadQueries()
+                .fallbackToDestructiveMigration()
+                .build();
+        TaskDAO taskDAO = db.taskDAO();
+        taskList = taskDAO.getAll();
+        TaskListFragment taskListFragment = new TaskListFragment();
+        Map<Date, List<Task>> groupedHashMap = null;
+        try {
+            groupedHashMap = taskListFragment.groupDataIntoHashMap(taskList);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        List<String> chartMonthList = new ArrayList<>();
+        DateFormat df = new SimpleDateFormat("MM/yyyy");
+        for(Date date : groupedHashMap.keySet()) {
+            String byMonth = df.format(date);
+            Log.i("MeFragment", byMonth);
+            if(!chartMonthList.contains(byMonth)) {
+                chartMonthList.add(byMonth);
+            }
+        }
+        float numberTasks = taskDAO.countAllTasks();
+        float doneTask = (float) taskDAO.countIsDoneTasks(1) / (float) numberTasks;
+        float notDoneTask = (float) taskDAO.countIsDoneTasks(0) / (float) numberTasks;
         List<PieEntry> entries = new ArrayList<>();
-        entries.add(new PieEntry(0.7f, Enums.TaskStatus.COMPLETED.getTaskStatus()));
-        entries.add(new PieEntry(0.3f, Enums.TaskStatus.NOT_COMPLETED.getTaskStatus()));
+        entries.add(new PieEntry(doneTask, Enums.TaskStatus.COMPLETED.getTaskStatus()));
+        entries.add(new PieEntry(notDoneTask, Enums.TaskStatus.NOT_COMPLETED.getTaskStatus()));
 
         List<Integer> colors = new ArrayList<>();
         for (int color : ColorTemplate.MATERIAL_COLORS) {
@@ -237,5 +290,26 @@ public class MeFragment extends Fragment {
             dateList.add(dateInLast7Days);
         }
         return dateList;
+    }
+
+    private Quote[] getQuoteData() throws Exception {
+        InputStream inputStream = getResources().openRawResource(R.raw.quotes);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        String text = "";
+        while((line = rd.readLine()) != null) {
+            text += line;
+        }
+        JSONObject obj = new JSONObject(text);
+        JSONArray quotes = obj.getJSONArray("quotes");
+        Gson gson = new Gson();
+        Quote[] list = gson.fromJson(quotes.toString(), Quote[].class);
+        return list;
+    }
+
+    private Quote onGetRandomQuote() throws Exception{
+        Quote[] quotes = getQuoteData();
+        int randomIndex = ThreadLocalRandom.current().nextInt(0, quotes.length);
+        return quotes[randomIndex];
     }
 }

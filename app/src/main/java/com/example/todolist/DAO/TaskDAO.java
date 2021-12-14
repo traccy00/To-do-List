@@ -44,4 +44,12 @@ public interface TaskDAO {
 
     @Query("DELETE FROM tasks where id = :taskId")
     void deleteById(int taskId);
+
+
+    @Query("SELECT count(*) FROM tasks where is_done = :isDone")
+    int countIsDoneTasks(int isDone);
+
+    @Query("SELECT count(*) FROM tasks")
+    int countAllTasks();
+
 }

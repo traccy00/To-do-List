@@ -1,6 +1,5 @@
 package com.example.todolist.adapter;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.todolist.CategoryListFragment;
 import com.example.todolist.R;
-import com.example.todolist.RecyclerViewClickListener;
+import com.example.todolist.service.RecyclerViewClickListener;
 import com.example.todolist.entity.Category;
 
 import java.text.ParseException;
