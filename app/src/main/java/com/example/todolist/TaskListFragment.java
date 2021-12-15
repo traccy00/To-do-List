@@ -152,7 +152,6 @@ public class TaskListFragment extends Fragment implements RecyclerViewClickListe
                 consolidatedList.add(generalItem);
             }
         }
-        Log.i("position", position + "");
         taskListAdapter = new TaskListAdapter(this.getContext(), consolidatedList,
                 TaskListFragment.this, "TaskListFragment");
         //category list
