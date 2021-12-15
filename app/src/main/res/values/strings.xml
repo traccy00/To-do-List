@@ -8,8 +8,46 @@
     <string name="menu_calendar">Calendar</string>
     <string name="menu_me">Me</string>
     <string name="meu_settings">Settings</string>
+
     <string-array name="twentyfour_hourclock">
         <item>am</item>
         <item>pm</item>
     </string-array>
+
+    <string-array name="ringtone_entries">
+        <item>None</item>
+        <item>Nostalgic</item>
+        <item>Lakeside</item>
+        <item>Improvised Dance</item>
+    </string-array>
+    <string-array name="ringtone_values">
+        <item>none</item>
+        <item>nostalgic</item>
+        <item>lakeside</item>
+        <item>improvised_dance</item>
+    </string-array>
+
+    <string-array name="language_entries">
+        <item>Vietnamese</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>vi</item>
+        <item>eng</item>
+    </string-array>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>

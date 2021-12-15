@@ -31,6 +31,7 @@
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_notifications.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_notifications_none_24.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_person.xml" value="0.25925925925925924" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_privacy_tip_24.xml" value="0.25625" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_radio_button_unchecked_24.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_repeat.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_settings.xml" value="0.262037037037037" />
@@ -43,6 +44,9 @@
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_watch_later_24.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_widgets_24.xml" value="0.20729166666666668" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_baseline_widgets_24_copy.xml" value="0.2703125" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_icons8_facebook.xml" value="0.25625" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_icons8_instagram.xml" value="0.25625" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_icons8_twitter.xml" value="0.25625" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/img.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/layout_sheet_dialog.xml" value="0.2703125" />
@@ -51,7 +55,7 @@
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/drawable/roundcorner.xml" value="0.2703125" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/font/sourcesan.xml" value="0.175" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_add_task.xml" value="0.25" />
-        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_main.xml" value="0.152" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/activity_splash.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_calendar.xml" value="0.23641304347826086" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/fragment_category.xml" value="0.25416666666666665" />
@@ -67,6 +71,7 @@
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/row_task.xml" value="0.16799999999999998" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/layout/spinner_category.xml" value="0.25416666666666665" />
         <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/ANDROID-PROJECT/Todo List/app/src/main/res/xml/preferences.xml" value="0.25416666666666665" />
       </map>
     </option>
   </component>

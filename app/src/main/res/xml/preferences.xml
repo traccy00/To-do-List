@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Customize">
+
+        <EditTextPreference
+            android:icon="@drawable/ic_baseline_person"
+            android:key="sync"
+            android:title="Account Sync" />
+
+        <ListPreference
+            android:entries="@array/ringtone_entries"
+            android:entryValues="@array/ringtone_values"
+            android:icon="@drawable/ic_baseline_notifications_24"
+            android:key="notification"
+            android:summary="Not set"
+            android:title="Notification and Reminder" />
+
+        <SwitchPreference
+            android:icon="@drawable/ic_baseline_bedtime_24"
+            android:key="dark"
+            android:title="Dark mode" />
+
+        <EditTextPreference
+            android:icon="@drawable/ic_baseline_bedtime_24"
+            android:key="advertise"
+            android:title="Remove advertising" />
+
+        <ListPreference
+            android:entries="@array/language_entries"
+            android:entryValues="@array/language_values"
+            android:icon="@drawable/ic_baseline_translate_24"
+            android:key="language"
+            android:title="Language" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="About">
+
+        <EditTextPreference
+            android:icon="@drawable/ic_baseline_feedback_24"
+            android:key="feedback"
+            android:title="Feedback" />
+        <EditTextPreference
+            android:icon="@drawable/ic_baseline_privacy_tip_24"
+            android:key="policy"
+            android:title="Privacy Policy" />
+
+        <EditTextPreference
+            android:icon="@drawable/ic_baseline_version_24"
+            android:key="version"
+            android:title="Version" />
+
+        <EditTextPreference
+            android:icon="@drawable/ic_icons8_facebook"
+            android:key="facebook"
+            android:title="Facebook" />
+
+        <EditTextPreference
+            android:icon="@drawable/ic_icons8_instagram"
+            android:key="insta"
+            android:title="Instagram" />
+
+        <EditTextPreference
+            android:icon="@drawable/ic_icons8_twitter"
+            android:key="twitter"
+            android:title="Twitter" />
+        <EditTextPreference
+            android:icon="@drawable/ic_icons8_twitter"
+            android:key="twitter"
+            android:title="Twitter" />
+        <EditTextPreference
+            android:icon="@drawable/ic_icons8_twitter"
+            android:key="twitter"
+            android:title="Twitter" />
+    </PreferenceCategory>
+
+
+</PreferenceScreen>

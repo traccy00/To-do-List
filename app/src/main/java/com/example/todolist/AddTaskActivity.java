@@ -259,7 +259,7 @@ public class AddTaskActivity extends AppCompatActivity implements RecyclerViewCl
         }
         //get category
         taskDAO.createTask(title, date, startTime, endTime, description, ring, 0, categoryId);
-
+        db.close();
         Toast.makeText(getApplicationContext(), "Add task successfully", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
